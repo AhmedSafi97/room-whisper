@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./database/dbConnection');
 
 const { join } = require('path');
 
