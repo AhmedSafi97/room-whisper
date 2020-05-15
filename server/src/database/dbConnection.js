@@ -11,7 +11,7 @@ if (!dbUrl) throw new Error('database url was not found');
 
 mongoose
   .connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('connected to database successful'))
+  .then(() => console.log('connected to database successfully'))
   .catch((err) => console.log(err));
 
 module.exports = mongoose.connection;
