@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt');
 
-const signupValidationSchema = require('../../utils/signupValidation');
-const createError = require('../../utils/createError');
 const { Users } = require('../../database/models');
+const { createError, signupValidationSchema } = require('../../utils');
 
 const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -17,7 +16,7 @@ const signup = async (req, res, next) => {
     if (usernameExist) {
       const errResponse = createError(
         400,
-        'bad request',
+        'Bad Request',
         'username is already taken'
       );
       return res.status(400).json(errResponse);
@@ -26,22 +25,22 @@ const signup = async (req, res, next) => {
     if (emailExist) {
       const errResponse = createError(
         400,
-        'bad request',
+        'Bad Request',
         'an account with this email already exists'
       );
       return res.status(400).json(errResponse);
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     await Users.create({ username, email, password: hashedPassword });
-    res
+    return res
       .status(201)
       .json({ statusCode: 201, message: 'signed up successfully' });
   } catch (err) {
     if (err.name === 'ValidationError') {
-      const errResponse = createError(400, 'bad request', err.errors);
+      const errResponse = createError(400, 'Bad Request', err.errors);
       return res.status(400).json(errResponse);
     }
-    next(err);
+    return next(err);
   }
 };
 

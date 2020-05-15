@@ -14,6 +14,7 @@ module.exports = {
     ecmaVersion: 2018,
   },
   rules: {
+    'no-underscore-dangle' : ["error", { "allow": ["_id"] }],
     // disables the windows/unix linebreak checks for anyone who will have to use windows
     'linebreak-style': 0,
     'arrow-body-style': ['error', 'as-needed'],
