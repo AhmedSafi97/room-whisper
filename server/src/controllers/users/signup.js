@@ -16,7 +16,7 @@ const signup = async (req, res, next) => {
     if (usernameExist) {
       const errResponse = createError(
         400,
-        'Bad request',
+        'Bad Request',
         'username is already taken'
       );
       return res.status(400).json(errResponse);
@@ -25,7 +25,7 @@ const signup = async (req, res, next) => {
     if (emailExist) {
       const errResponse = createError(
         400,
-        'Bad request',
+        'Bad Request',
         'an account with this email already exists'
       );
       return res.status(400).json(errResponse);
@@ -37,7 +37,7 @@ const signup = async (req, res, next) => {
       .json({ statusCode: 201, message: 'signed up successfully' });
   } catch (err) {
     if (err.name === 'ValidationError') {
-      const errResponse = createError(400, 'Bad request', err.errors);
+      const errResponse = createError(400, 'Bad Request', err.errors);
       return res.status(400).json(errResponse);
     }
     return next(err);

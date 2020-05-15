@@ -20,7 +20,7 @@ const login = async (req, res, next) => {
     if (!userData) {
       const errResponse = createError(
         400,
-        'Bad request',
+        'Bad Request',
         'an account with this email does not exist'
       );
       return res.status(400).json(errResponse);
@@ -41,7 +41,7 @@ const login = async (req, res, next) => {
       .json({ statusCode: 200, message: 'logged in successfully' });
   } catch (err) {
     if (err.name === 'ValidationError') {
-      const errResponse = createError(400, 'Bad request', err.errors);
+      const errResponse = createError(400, 'Bad Request', err.errors);
       return res.status(400).json(errResponse);
     }
     return next(err);

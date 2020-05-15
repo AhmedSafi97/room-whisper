@@ -6,7 +6,7 @@ const serverError = (err, req, res, next) => {
   console.log(err);
   const errorResponse = createError(
     500,
-    'internal server error',
+    'Internal Server Error',
     'Something went wrong, please try again later'
   );
   res.status(500).json(errorResponse);
