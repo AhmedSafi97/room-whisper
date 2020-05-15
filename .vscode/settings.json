@@ -1,6 +1,15 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
+  "eslint.workingDirectories": ["client", "server"],
+  "[javascript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true
+    },
+    "editor.formatOnSave": false
   },
-  "editor.formatOnSave": false
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "files.eol": "\n"
 }
