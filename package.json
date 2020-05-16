@@ -9,7 +9,7 @@
     "init": "cd client && npm i && cd ../server && npm i",
     "test": "cd server && npm t",
     "start": "NODE_ENV=production node ./server/src",
-    "heroku-postbuild": "NODE_ENV=production cd client && npm install && npm run build",
+    "heroku-postbuild": "NODE_ENV=production cd server && npm i && cd ../client && npm i && npm run build",
     "install": "npm run init",
     "kill": "fuser -k 4000/tcp"
   },
