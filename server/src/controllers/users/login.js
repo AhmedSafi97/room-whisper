@@ -8,8 +8,8 @@ const {
 } = require('../../utils');
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
   try {
+    const { email, password } = req.body;
     await loginValidationSchema.validate(
       { email, password },
       {
@@ -34,7 +34,7 @@ const login = async (req, res, next) => {
       );
       return res.status(401).json(errResponse);
     }
-    const payload = { id: userData._id };
+    const payload = { _id: userData._id };
     const token = await signToken(payload);
     return res
       .cookie('user', token)
