@@ -8,12 +8,13 @@
     "client": "cd client && npm start",
     "init": "cd client && npm i && cd ../server && npm i",
     "test": "cd server && npm t",
-    "start": "NODE_ENV=production node ./server/src",
-    "heroku-postbuild": "NODE_ENV=production cd server && npm i && cd ../client && npm i && npm run build",
+    "start": "cross-env NODE_ENV=production node ./server/src",
+    "heroku-postbuild": "cross-env NODE_ENV=production cd client && npm run build",
     "install": "npm run init",
     "kill": "fuser -k 4000/tcp"
   },
   "cacheDirectories": [
+    "node_modules",
     "server/node_modules",
     "client/node_modules"
   ],
@@ -27,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/AhmedSafi97/chatapp/issues"
   },
-  "homepage": "https://github.com/AhmedSafi97/chatapp#readme"
+  "homepage": "https://github.com/AhmedSafi97/chatapp#readme",
+  "dependencies": {
+    "cross-env": "^7.0.2"
+  }
 }

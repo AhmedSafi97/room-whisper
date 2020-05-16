@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node ./src",
-    "dev": "NODE_ENV=development nodemon ./src",
-    "test": " NODE_ENV=test jest"
+    "start": "cross-env NODE_ENV=production node ./src",
+    "dev": "cross-env NODE_ENV=development nodemon ./src",
+    "test": "cross-env NODE_ENV=test jest"
   },
   "keywords": [],
   "author": "",
