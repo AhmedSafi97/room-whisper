@@ -1,36 +1,26 @@
 import React from 'react';
-import { GoogleLogin } from 'react-google-login';
-import axios from 'axios';
+import { Switch, Route, useHistory } from 'react-router-dom';
+import { Button } from 'antd';
+import Login from './Components/Form/Login';
 import './App.css';
+import 'antd/dist/antd.css';
 
-const successResponse = (response) => {
-  const { tokenId } = response;
-  console.log(tokenId);
-  axios
-    .post('/api/v1/login/google', { tokenId })
-    .then(console.log)
-    .catch(console.log);
-};
-
-const failureResponse = (response) => {
-  console.log('error', response);
-};
-
-function App() {
+const App = () => {
+  const history = useHistory();
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="App-header">
         <h1>Welcome</h1>
-      </header>
-      <GoogleLogin
-        clientId="882324455984-i7obpjbjr79rug23t9aitmlc15cqvqtf.apps.googleusercontent.com"
-        buttonText="Login"
-        onSuccess={successResponse}
-        onFailure={failureResponse}
-        cookiePolicy="single_host_origin"
-      />
+        <Button onClick={() => history.push('/login')}>Sign In</Button>
+
+        <Switch>
+          <Route path="/login">
+            <Login history={history} />
+          </Route>
+        </Switch>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
