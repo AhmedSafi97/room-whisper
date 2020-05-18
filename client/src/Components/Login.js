@@ -4,57 +4,37 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { GoogleLogin } from 'react-google-login';
 import { Form, Input, Button, message } from 'antd';
 
-const Signup = ({ history }) => {
+const Login = ({ history }) => {
   const successResponse = async (response) => {
     try {
       const { tokenId } = response;
       await axios.post('/api/v1/login/google', { tokenId });
-      message.success('sign up successfully');
-      history.push('/');
+      history.push('/rooms');
     } catch (err) {
       message.error('Something went wrong, please try again later');
     }
   };
 
-  const failureResponse = () => {
+  const failureResponse = (err) => {
     message.error('Something went wrong, please try again later');
   };
 
-  const onFinish = async ({ username, email, password }) => {
+  const onFinish = async ({ email, password }) => {
     try {
-      await axios.post('/api/v1/signup', { username, email, password });
       await axios.post('/api/v1/login', { email, password });
-      message.success('sign up successfully');
-      history.push('/');
+      history.push('/rooms');
     } catch (err) {
       if (err.response) message.error(err.response.data.message);
       else message.error('Something went wrong, please try again later');
     }
   };
 
-  const login = () => history.push('/login');
+  const signup = () => history.push('/signup');
 
   return (
     <>
-      <p>Sign Up</p>
-      <Form name="signup" onFinish={onFinish}>
-        <Form.Item
-          label="Username"
-          name="username"
-          validateTrigger="onSubmit"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your name!',
-            },
-            {
-              max: 12,
-              min: 3,
-            },
-          ]}
-        >
-          <Input placeholder="Type your name" />
-        </Form.Item>
+      <p>Login</p>
+      <Form name="login" onFinish={onFinish}>
         <Form.Item
           label="Email"
           name="email"
@@ -94,26 +74,26 @@ const Signup = ({ history }) => {
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Sign Up
+            LOGIN
           </Button>
         </Form.Item>
       </Form>
-      <p>Or Sign Up Using</p>
+      <p>Or Sign In Using</p>
       <GoogleLogin
         clientId="882324455984-i7obpjbjr79rug23t9aitmlc15cqvqtf.apps.googleusercontent.com"
-        buttonText="Sign Up"
+        buttonText="Login"
         onSuccess={successResponse}
         onFailure={failureResponse}
         cookiePolicy="single_host_origin"
       />
-      <p>Have an account ?</p>
-      <Button onClick={login}>Login</Button>
+      <p>Have not account yet ?</p>
+      <Button onClick={signup}>SIGN UP</Button>
     </>
   );
 };
 
-Signup.propTypes = {
+Login.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
 };
 
-export default Signup;
+export default Login;
