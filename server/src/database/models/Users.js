@@ -10,7 +10,7 @@ const userSchema = new Schema({
     required: true,
   },
   password: String,
-  googleId: String,
+  role: String,
 });
 
 const Users = model('Users', userSchema);
