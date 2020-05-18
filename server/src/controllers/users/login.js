@@ -10,6 +10,7 @@ const {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    const payload = {};
     await loginValidationSchema.validate(
       { email, password },
       {
@@ -34,7 +35,8 @@ const login = async (req, res, next) => {
       );
       return res.status(401).json(errResponse);
     }
-    const payload = { _id: userData._id };
+    if (userData.role === 'admin') payload.role = 'admin';
+    payload._id = userData._id;
     const token = await signToken(payload);
     return res
       .cookie('user', token)

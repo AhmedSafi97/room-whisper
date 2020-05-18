@@ -3,8 +3,8 @@ const { signToken, verifyGoogleToken } = require('../../utils');
 
 const googleLogin = async (req, res, next) => {
   try {
-    let payload;
     const { tokenId } = req.body;
+    let payload;
     const { email, name } = await verifyGoogleToken(tokenId);
     const currentUser = await Users.findOne({ email });
     if (!currentUser) {
