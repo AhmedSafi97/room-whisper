@@ -1,5 +1,5 @@
 const { clientError, serverError } = require('./errorHandlers');
-const { signup, login, googleLogin } = require('./users');
+const { signup, login, googleLogin, checkToken } = require('./users');
 const { getRooms, createRoom } = require('./rooms');
 
 module.exports = {
@@ -8,6 +8,7 @@ module.exports = {
   signup,
   login,
   googleLogin,
+  checkToken,
   getRooms,
   createRoom,
 };
