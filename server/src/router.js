@@ -6,10 +6,14 @@ const {
   signup,
   login,
   googleLogin,
+  getRooms,
 } = require('./controllers');
+
+const { withAuth } = require('./middleware');
 
 const router = express.Router();
 
+router.get('/rooms', withAuth, getRooms);
 router.post('/signup', signup);
 router.post('/login', login);
 router.post('/login/google', googleLogin);
