@@ -7,6 +7,7 @@ const {
   login,
   googleLogin,
   getRooms,
+  createRoom,
 } = require('./controllers');
 
 const { withAuth } = require('./middleware');
@@ -14,6 +15,7 @@ const { withAuth } = require('./middleware');
 const router = express.Router();
 
 router.get('/rooms', withAuth, getRooms);
+router.post('/rooms', withAuth, createRoom);
 router.post('/signup', signup);
 router.post('/login', login);
 router.post('/login/google', googleLogin);
