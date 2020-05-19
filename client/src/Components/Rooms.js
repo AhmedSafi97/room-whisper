@@ -13,10 +13,10 @@ const Rooms = ({ history, role }) => {
       const {
         data: { data },
       } = await axios.get('/api/v1/rooms');
-      const rooms = data.map((x) => x.room);
       setLoading(false);
-      setRoom(rooms);
+      setRoom(data);
     } catch (err) {
+      setLoading(false);
       setError('Something went wrong, please try again later');
     }
   };
