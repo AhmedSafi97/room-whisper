@@ -3,12 +3,18 @@ const { Rooms } = require('../../database/models');
 const getRooms = async (req, res, next) => {
   try {
     const rooms = await Rooms.find();
-    res.json({
+    if (rooms.length === 0)
+      return res.json({
+        statusCode: 200,
+        data: [],
+      });
+    const roomsNames = rooms.map(({ room }) => room);
+    return res.json({
       statusCode: 200,
-      data: rooms,
+      data: roomsNames,
     });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 

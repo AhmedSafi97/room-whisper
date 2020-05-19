@@ -4,6 +4,7 @@ import Login from './Components/Login';
 import Signup from './Components/Signup';
 import Rooms from './Components/Rooms';
 import Landing from './Components/Landing';
+import ChattingRoom from './Components/ChattingRoom';
 import WithAuth from './Components/WithAuth';
 import './App.css';
 import 'antd/dist/antd.css';
@@ -27,6 +28,11 @@ const App = () => {
           <Route path="/signup">
             <WithAuth authStatus="logout">
               <Signup history={history} />
+            </WithAuth>
+          </Route>
+          <Route path="/rooms/:room">
+            <WithAuth authStatus="login">
+              <ChattingRoom history={history} />
             </WithAuth>
           </Route>
           <Route path="/rooms">
