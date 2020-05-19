@@ -24,8 +24,11 @@ const Login = ({ history }) => {
       await axios.post('/api/v1/login', { email, password });
       history.push('/rooms');
     } catch (err) {
-      if (err.response) message.error(err.response.data.message);
-      else message.error('Something went wrong, please try again later');
+      if (err.response) {
+        if (err.response.status === 500)
+          message.error('Something went wrong, please try again later');
+        else message.error(err.response.data.message);
+      } else message.error('Something went wrong, please try again later');
     }
   };
 

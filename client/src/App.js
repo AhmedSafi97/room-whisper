@@ -31,7 +31,7 @@ const App = () => {
           </Route>
           <Route path="/rooms">
             <WithAuth authStatus="login">
-              <Rooms />
+              <Rooms history={history} />
             </WithAuth>
           </Route>
         </Switch>
