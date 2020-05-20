@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import axios from 'axios';
-import { Spin, Result, Button } from 'antd';
+import { Button } from 'antd';
 import io from 'socket.io-client';
 
 const socket = io({
@@ -10,36 +9,29 @@ const socket = io({
 });
 
 const ChattingRoom = ({ history }) => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState();
+  const [username, setUsername] = useState();
   const { room } = useParams();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const {
-          data: { data },
-        } = await axios.get(`/api/v1/rooms/${room}/users`);
-        setLoading(false);
-        setUsers(data);
-      } catch (err) {
-        setLoading(false);
-        setError('Something went wrong, please try again later');
-      }
-    };
-    fetchData();
     socket.open();
-    console.log(socket.disconnected);
     socket.emit('joinRoom', { room });
     socket.on('joinRoom', (onlineUsers) => {
       setUsers(onlineUsers);
     });
+    socket.on('username', setUsername);
+
     return () => {
       socket.removeAllListeners();
       socket.close();
     };
   }, [room]);
+
+  useEffect(() => {
+    if (users && username) {
+      if (!users.includes(username)) history.push('/rooms');
+    }
+  }, [users, username, history]);
 
   const leaveRoom = () => {
     history.push('/rooms');
@@ -48,15 +40,7 @@ const ChattingRoom = ({ history }) => {
   return (
     <div>
       <Button onClick={leaveRoom}>Leave room</Button>
-      {loading && <Spin />}
-      {error && !loading && (
-        <Result
-          status="500"
-          title="500"
-          subTitle="Something went Wrong, please try again later"
-        />
-      )}
-      {!loading && !error && (
+      {users && (
         <div>
           <p>
             {room}, {users.length} online users
