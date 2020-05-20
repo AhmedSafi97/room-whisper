@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import io from 'socket.io-client';
 
 const socket = io({
@@ -40,6 +40,7 @@ const ChattingRoom = ({ history }) => {
   return (
     <div>
       <Button onClick={leaveRoom}>Leave room</Button>
+      {!users && <Spin />}
       {users && (
         <div>
           <p>
