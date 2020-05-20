@@ -3,6 +3,11 @@ import { useParams } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import axios from 'axios';
 import { Spin, Result, Button } from 'antd';
+import io from 'socket.io-client';
+
+const socket = io({
+  autoConnect: false,
+});
 
 const ChattingRoom = ({ history }) => {
   const [loading, setLoading] = useState(true);
@@ -10,24 +15,39 @@ const ChattingRoom = ({ history }) => {
   const [users, setUsers] = useState([]);
   const { room } = useParams();
 
-  const fetchData = async () => {
-    try {
-      const {
-        data: { data },
-      } = await axios.get(`/api/v1/rooms/${room}/users`);
-      setLoading(false);
-      setUsers(data);
-    } catch (err) {
-      setLoading(false);
-      setError('Something went wrong, please try again later');
-    }
-  };
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const {
+          data: { data },
+        } = await axios.get(`/api/v1/rooms/${room}/users`);
+        setLoading(false);
+        setUsers(data);
+      } catch (err) {
+        setLoading(false);
+        setError('Something went wrong, please try again later');
+      }
+    };
     fetchData();
-  }, []);
+    socket.open();
+    console.log(socket.disconnected);
+    socket.emit('joinRoom', { room });
+    socket.on('joinRoom', (onlineUsers) => {
+      setUsers(onlineUsers);
+    });
+    return () => {
+      socket.removeAllListeners();
+      socket.close();
+    };
+  }, [room]);
+
+  const leaveRoom = () => {
+    history.push('/rooms');
+  };
+
   return (
     <div>
-      <Button onClick={() => history.goBack()}>Leave room</Button>
+      <Button onClick={leaveRoom}>Leave room</Button>
       {loading && <Spin />}
       {error && !loading && (
         <Result
