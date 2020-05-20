@@ -8,19 +8,20 @@ const Rooms = ({ history, role }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [room, setRoom] = useState([]);
-  const fetchData = async () => {
-    try {
-      const {
-        data: { data },
-      } = await axios.get('/api/v1/rooms');
-      setLoading(false);
-      setRoom(data);
-    } catch (err) {
-      setLoading(false);
-      setError('Something went wrong, please try again later');
-    }
-  };
+
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const {
+          data: { data },
+        } = await axios.get('/api/v1/rooms');
+        setLoading(false);
+        setRoom(data);
+      } catch (err) {
+        setLoading(false);
+        setError('Something went wrong, please try again later');
+      }
+    };
     fetchData();
   }, []);
   return (
