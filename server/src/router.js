@@ -9,7 +9,6 @@ const {
   checkToken,
   getRooms,
   createRoom,
-  getRoomUsers,
 } = require('./controllers');
 
 const { withAuth } = require('./middleware');
@@ -17,7 +16,6 @@ const { withAuth } = require('./middleware');
 const router = express.Router();
 
 router.get('/checkToken', checkToken);
-router.get('/rooms/:room/users', withAuth, getRoomUsers);
 router.get('/rooms', withAuth, getRooms);
 router.post('/rooms', withAuth, createRoom);
 router.post('/signup', signup);
