@@ -29,7 +29,7 @@ const WithAuth = ({ authStatus, children }) => {
   if (loading) return <Spin />;
   if (authStatus === 'login') {
     return auth ? (
-      <div>{React.cloneElement(children, { role })}</div>
+      <div>{React.cloneElement(children, { role, setRole, setAuth })}</div>
     ) : (
       <Redirect to="/login" />
     );
