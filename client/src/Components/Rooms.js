@@ -2,31 +2,51 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import axios from 'axios';
-import { Button, Spin, Result, Empty } from 'antd';
+import { Button, Spin, Result, Empty, Form, Input, message } from 'antd';
 
 const Rooms = ({ history, role }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [room, setRoom] = useState([]);
 
+  const fetchData = async () => {
+    try {
+      const {
+        data: { data },
+      } = await axios.get('/api/v1/rooms');
+      setLoading(false);
+      setRoom(data);
+    } catch (err) {
+      setLoading(false);
+      setError('Something went wrong, please try again later');
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const {
-          data: { data },
-        } = await axios.get('/api/v1/rooms');
-        setLoading(false);
-        setRoom(data);
-      } catch (err) {
-        setLoading(false);
-        setError('Something went wrong, please try again later');
-      }
-    };
     fetchData();
   }, []);
+
+  const createRoom = async ({ newRoom }) => {
+    try {
+      await axios.post('/api/v1/rooms', { room: newRoom });
+      await fetchData();
+      message.success('room has been created successfully');
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 500)
+          message.error('Something went wrong, please try again later');
+        else message.error(err.response.data.message);
+      } else message.error('Something went wrong, please try again later');
+    }
+  };
+
   return (
     <div>
-      <Button onClick={() => history.push('/login')}>Logout</Button>
+      <div>
+        <Button onClick={() => history.push('/login')}>Logout</Button>
+        <br />
+        <br />
+      </div>
       <div>
         {loading && <Spin />}
         {error && !loading && (
@@ -44,7 +64,26 @@ const Rooms = ({ history, role }) => {
         {room.length > 0 && !error && !loading && (
           <div>
             {role === 'admin' ? (
-              <Button>Create new Room</Button>
+              <Form name="createRoom" onFinish={createRoom}>
+                <Form.Item
+                  name="newRoom"
+                  label="new room name"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'enter room name!',
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Create Room
+                  </Button>
+                </Form.Item>
+              </Form>
             ) : (
               <p>Welcome, pick a room and start chatting</p>
             )}
