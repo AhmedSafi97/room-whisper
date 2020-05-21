@@ -1,5 +1,5 @@
 const { parse } = require('cookie');
-const { Rooms, Users } = require('../database/models');
+const { Rooms, Users, Chats } = require('../database/models');
 const { verifyToken } = require('../utils');
 
 const ioHandler = (socket, io) => {
@@ -12,8 +12,25 @@ const ioHandler = (socket, io) => {
     const onlineUsers = await Users.find({ _id: { $in: users } });
     const usersNames = onlineUsers.map(({ username }) => username);
     const { username } = await Users.findOne({ _id });
+    const oldChats = await Chats.find({ room });
     socket.emit('username', username);
+    socket.emit('msg', oldChats);
     io.to(room).emit('joinRoom', usersNames);
+  });
+
+  socket.on('msg', async ({ msg, room, username }) => {
+    const newChat = await Chats.create({
+      msg,
+      author: username,
+      room,
+    });
+    io.to(room).emit('msg', [
+      {
+        msg: newChat.msg,
+        author: username,
+        date: newChat.date,
+      },
+    ]);
   });
 
   socket.on('error', (err) => {
@@ -26,10 +43,8 @@ const ioHandler = (socket, io) => {
     const roomToLeave = await Rooms.findOne({ users: { $in: [_id] } });
     if (roomToLeave) {
       const { room } = roomToLeave;
-      // console.log(room);
       await Rooms.updateOne({ room }, { $pullAll: { users: [_id] } });
       const { users } = await Rooms.findOne({ room });
-      // console.log(users);
       const onlineUsers = await Users.find({ _id: { $in: users } });
       const usersNames = onlineUsers.map(({ username }) => username);
       io.to(room).emit('joinRoom', usersNames);
