@@ -4,7 +4,8 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import axios from 'axios';
 import { Button, Spin, Result, Empty, Form, Input, message } from 'antd';
 
-const Rooms = ({ history, role }) => {
+// eslint-disable-next-line react/prop-types
+const Rooms = ({ history, role, setRole, setAuth }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [room, setRoom] = useState([]);
@@ -40,10 +41,20 @@ const Rooms = ({ history, role }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await axios.get('/api/v1/logout');
+      setAuth(false);
+      setRole('user');
+    } catch (err) {
+      message.error('Something went wrong, please try again later');
+    }
+  };
+
   return (
     <div>
       <div>
-        <Button onClick={() => history.push('/login')}>Logout</Button>
+        <Button onClick={logout}>Logout</Button>
         <br />
         <br />
       </div>
