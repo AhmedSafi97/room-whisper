@@ -6,12 +6,12 @@ const chatSchema = new Schema({
     required: true,
   },
   author: {
-    type: Schema.Types.ObjectId,
-    ref: 'Users',
+    type: String,
+    required: true,
   },
   room: {
-    type: Schema.Types.ObjectId,
-    ref: 'Rooms',
+    type: String,
+    required: true,
   },
   date: {
     type: Date,

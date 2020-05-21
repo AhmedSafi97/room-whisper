@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { Button, Spin } from 'antd';
+import { Button, Spin, Input, Form } from 'antd';
 import io from 'socket.io-client';
+import moment from 'moment';
 
 const socket = io({
   autoConnect: false,
@@ -11,6 +12,7 @@ const socket = io({
 const ChattingRoom = ({ history }) => {
   const [users, setUsers] = useState();
   const [username, setUsername] = useState();
+  const [messages, setMessages] = useState([]);
   const { room } = useParams();
 
   useEffect(() => {
@@ -20,7 +22,9 @@ const ChattingRoom = ({ history }) => {
       setUsers(onlineUsers);
     });
     socket.on('username', setUsername);
-
+    socket.on('msg', (newMessage) => {
+      setMessages((msgs) => [...msgs, ...newMessage]);
+    });
     return () => {
       socket.removeAllListeners();
       socket.close();
@@ -35,6 +39,10 @@ const ChattingRoom = ({ history }) => {
 
   const leaveRoom = () => {
     history.push('/rooms');
+  };
+
+  const onFinish = ({ msg }) => {
+    socket.emit('msg', { msg, room, username });
   };
 
   return (
@@ -53,6 +61,41 @@ const ChattingRoom = ({ history }) => {
                 <div key={user}>{user}</div>
               ))}
             </div>
+          </div>
+          <div>
+            <div>
+              {messages.length !== 0 &&
+                messages.map((m) => (
+                  <div key={m.date}>
+                    <span>
+                      <b>{m.author} :</b>
+                    </span>
+                    <p>{m.msg}</p>
+                    <span>
+                      {moment(m.date).format('dddd, MMMM Do YYYY, h:mm:ss a')}
+                    </span>
+                  </div>
+                ))}
+            </div>
+            <Form name="sendMsg" onFinish={onFinish}>
+              <Form.Item
+                name="msg"
+                rules={[
+                  {
+                    required: true,
+                    message: 'write something!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Send
+                </Button>
+              </Form.Item>
+            </Form>
           </div>
         </div>
       )}
