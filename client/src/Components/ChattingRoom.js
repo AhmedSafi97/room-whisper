@@ -14,6 +14,7 @@ const ChattingRoom = ({ history }) => {
   const [username, setUsername] = useState();
   const [messages, setMessages] = useState([]);
   const { room } = useParams();
+  const [form] = Form.useForm();
 
   useEffect(() => {
     socket.open();
@@ -41,8 +42,13 @@ const ChattingRoom = ({ history }) => {
     history.push('/rooms');
   };
 
+  const onReset = () => {
+    form.resetFields();
+  };
+
   const onFinish = ({ msg }) => {
     socket.emit('msg', { msg, room, username });
+    onReset();
   };
 
   return (
@@ -63,10 +69,10 @@ const ChattingRoom = ({ history }) => {
             </div>
           </div>
           <div>
-            <div>
+            <div className="chat-container">
               {messages.length !== 0 &&
                 messages.map((m) => (
-                  <div key={m.date}>
+                  <div key={m.date} className="chat">
                     <span>
                       <b>{m.author} :</b>
                     </span>
@@ -77,7 +83,7 @@ const ChattingRoom = ({ history }) => {
                   </div>
                 ))}
             </div>
-            <Form name="sendMsg" onFinish={onFinish}>
+            <Form name="sendMsg" form={form} onFinish={onFinish}>
               <Form.Item
                 name="msg"
                 rules={[
@@ -87,7 +93,7 @@ const ChattingRoom = ({ history }) => {
                   },
                 ]}
               >
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
 
               <Form.Item>
