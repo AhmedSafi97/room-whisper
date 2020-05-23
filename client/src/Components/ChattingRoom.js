@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { Button, Spin, Input, Form } from 'antd';
@@ -15,6 +15,7 @@ const ChattingRoom = ({ history }) => {
   const [messages, setMessages] = useState([]);
   const { room } = useParams();
   const [form] = Form.useForm();
+  const containerNode = useRef(null);
 
   useEffect(() => {
     socket.open();
@@ -37,6 +38,12 @@ const ChattingRoom = ({ history }) => {
       if (!users.includes(username)) history.push('/rooms');
     }
   }, [users, username, history]);
+
+  useEffect(() => {
+    if (containerNode.current) {
+      containerNode.current.scrollTop = containerNode.current.scrollHeight;
+    }
+  });
 
   const leaveRoom = () => {
     history.push('/rooms');
@@ -69,7 +76,7 @@ const ChattingRoom = ({ history }) => {
             </div>
           </div>
           <div>
-            <div className="chat-container">
+            <div className="chat-container" ref={containerNode}>
               {messages.length !== 0 &&
                 messages.map((m) => (
                   <div key={m.date} className="chat">
