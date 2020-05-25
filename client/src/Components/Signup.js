@@ -1,16 +1,17 @@
 import React from 'react';
 import axios from 'axios';
+import propTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { GoogleLogin } from 'react-google-login';
 import { Form, Input, Button, message } from 'antd';
 
-const Signup = ({ history }) => {
+const Signup = ({ history, setAuth }) => {
   const successResponse = async (response) => {
     try {
       const { tokenId } = response;
       await axios.post('/api/v1/login/google', { tokenId });
       message.success('sign up successfully');
-      history.push('/rooms');
+      setAuth(true);
     } catch (err) {
       message.error('Something went wrong, please try again later');
     }
@@ -25,7 +26,7 @@ const Signup = ({ history }) => {
       await axios.post('/api/v1/signup', { username, email, password });
       await axios.post('/api/v1/login', { email, password });
       message.success('sign up successfully');
-      history.push('/rooms');
+      setAuth(true);
     } catch (err) {
       if (err.response) {
         if (err.response.status === 500)
@@ -116,6 +117,7 @@ const Signup = ({ history }) => {
 };
 
 Signup.propTypes = {
+  setAuth: propTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
 };
 

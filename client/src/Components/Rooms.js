@@ -4,7 +4,6 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import axios from 'axios';
 import { Button, Spin, Result, Empty, Form, Input, message } from 'antd';
 
-// eslint-disable-next-line react/prop-types
 const Rooms = ({ history, role, setRole, setAuth }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -113,12 +112,10 @@ const Rooms = ({ history, role, setRole, setAuth }) => {
   );
 };
 
-Rooms.defaultProps = {
-  role: 'user',
-};
-
 Rooms.propTypes = {
-  role: PropTypes.string,
+  role: PropTypes.string.isRequired,
+  setRole: PropTypes.func.isRequired,
+  setAuth: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
 };
 
