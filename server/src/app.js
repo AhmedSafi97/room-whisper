@@ -6,7 +6,6 @@ const { join } = require('path');
 
 const express = require('express');
 const socketIO = require('socket.io');
-
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 
@@ -19,16 +18,12 @@ const io = socketIO(server);
 
 app.disabled('x-powered-by');
 
-app.set('port', process.env.PORT || 4000);
-
 app.use(cookieParser());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/v1', router);
-
-io.on('connection', (socket) => ioHandler(socket, io));
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(join(__dirname, '..', '..', 'client', 'build')));
@@ -37,4 +32,6 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
-module.exports = { app, server };
+io.on('connection', ioHandler(io));
+
+module.exports = server;
