@@ -8,7 +8,7 @@ const checkToken = async (req, res, next) => {
     const { role } = await Users.findOne({ _id });
     return res.json({ role });
   } catch (err) {
-    if (err.message === 'jwt must be provided') return res.sendStatus(200);
+    if (err.message === 'jwt must be provided') return res.send('un-auth');
     return next(err);
   }
 };
