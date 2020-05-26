@@ -5,17 +5,22 @@ const { verifyToken } = require('../utils');
 const joinRoom = (io, socket) => async ({ room }) => {
   try {
     socket.join(room);
-    const { user } = parse(socket.request.headers.cookie);
-    const { _id } = await verifyToken(user);
+    const { token } = parse(socket.request.headers.cookie);
+    const { _id } = await verifyToken(token);
+
     await Rooms.updateOne({ room }, { $addToSet: { users: [_id] } });
-    const { users } = await Rooms.findOne({ room });
-    const onlineUsers = await Users.find({ _id: { $in: users } });
-    const usersNames = onlineUsers.map(({ username }) => username);
+
+    const roomInfo = await Rooms.findOne({ room });
+    const roomMessages = await Chats.find({ room });
+    const roomUsers = await Users.find({ _id: { $in: roomInfo.users } });
+    const usersInfo = roomUsers.map(({ username }) => username);
+
     const { username } = await Users.findOne({ _id });
-    const oldChats = await Chats.find({ room });
+
     socket.emit('username', username);
-    socket.emit('msg', oldChats);
-    io.to(room).emit('joinRoom', usersNames);
+    socket.emit('msg', roomMessages);
+
+    io.to(room).emit('joinRoom', usersInfo);
   } catch (err) {
     console.log(err);
   }
