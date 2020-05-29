@@ -1,20 +1,21 @@
 const { parse } = require('cookie');
-const { Rooms, Users } = require('../database/models');
-const { verifyToken } = require('../utils');
+const { Rooms } = require('../database/models');
+const { verifyToken, findRoomUsers } = require('../utils');
 
 const socketDisconnect = (io, socket) => async () => {
   try {
-    const { user } = parse(socket.request.headers.cookie);
-    const { _id } = await verifyToken(user);
-    const roomToLeave = await Rooms.findOne({ users: { $in: [_id] } });
-    if (roomToLeave) {
-      const { room } = roomToLeave;
-      await Rooms.updateOne({ room }, { $pullAll: { users: [_id] } });
-      const { users } = await Rooms.findOne({ room });
-      const onlineUsers = await Users.find({ _id: { $in: users } });
-      const usersNames = onlineUsers.map(({ username }) => username);
-      io.to(room).emit('joinRoom', usersNames);
-    }
+    const room = Object.keys(socket.rooms)[1];
+    // socket.rooms returns an object where key and value are the same
+    // first key is socket id, second key is rooms name
+
+    const { token } = parse(socket.request.headers.cookie);
+    const { _id } = await verifyToken(token);
+
+    await Rooms.updateOne({ room }, { $pullAll: { users: [_id] } });
+
+    const usersInfo = await findRoomUsers(room);
+
+    io.to(room).emit('joinRoom', usersInfo);
   } catch (err) {
     console.log(err);
   }
