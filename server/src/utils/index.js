@@ -5,6 +5,7 @@ const loginValidationSchema = require('./loginValidation');
 const verifyGoogleToken = require('./verifyGoogleToken');
 const verifyToken = require('./verifyToken');
 const roomValidation = require('./roomValidation');
+const findRoomUsers = require('./findRoomUsers');
 
 module.exports = {
   createError,
@@ -14,4 +15,5 @@ module.exports = {
   verifyGoogleToken,
   verifyToken,
   roomValidation,
+  findRoomUsers,
 };
