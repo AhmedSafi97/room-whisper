@@ -1,11 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import propTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import { GoogleLogin } from 'react-google-login';
 import { Form, Input, Button, message } from 'antd';
+import { useHistory } from 'react-router-dom';
 
-const Login = ({ history, setAuth }) => {
+const Login = ({ setAuth }) => {
+  const history = useHistory();
+
   const successResponse = async (response) => {
     try {
       const { tokenId } = response;
@@ -98,7 +100,6 @@ const Login = ({ history, setAuth }) => {
 
 Login.propTypes = {
   setAuth: propTypes.func.isRequired,
-  history: ReactRouterPropTypes.history.isRequired,
 };
 
 export default Login;

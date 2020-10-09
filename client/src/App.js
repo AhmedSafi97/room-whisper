@@ -45,15 +45,10 @@ const App = () => {
         {auth ? (
           <Switch>
             <Route path="/rooms/:room">
-              <ChattingRoom history={history} />
+              <ChattingRoom />
             </Route>
             <Route path="/rooms">
-              <Rooms
-                history={history}
-                role={role}
-                setRole={setRole}
-                setAuth={setAuth}
-              />
+              <Rooms role={role} setRole={setRole} setAuth={setAuth} />
             </Route>
             <Route path="*">
               <Redirect to="rooms" />
@@ -62,13 +57,13 @@ const App = () => {
         ) : (
           <Switch>
             <Route path="/signup">
-              <Signup history={history} setAuth={setAuth} />
+              <Signup setAuth={setAuth} />
             </Route>
             <Route path="/login">
-              <Login history={history} setAuth={setAuth} />
+              <Login setAuth={setAuth} />
             </Route>
             <Route exact path="/">
-              <Landing history={history} />
+              <Landing />
             </Route>
             <Route exact path="*">
               <Redirect to="/" />

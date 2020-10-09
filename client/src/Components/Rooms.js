@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import axios from 'axios';
 import { Button, Spin, Result, Empty, Form, Input, message } from 'antd';
+import { useHistory } from 'react-router-dom';
 
-const Rooms = ({ history, role, setRole, setAuth }) => {
+const Rooms = ({ role, setRole, setAuth }) => {
+  const history = useHistory();
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [room, setRoom] = useState([]);
@@ -116,7 +118,6 @@ Rooms.propTypes = {
   role: PropTypes.string.isRequired,
   setRole: PropTypes.func.isRequired,
   setAuth: PropTypes.func.isRequired,
-  history: ReactRouterPropTypes.history.isRequired,
 };
 
 export default Rooms;
