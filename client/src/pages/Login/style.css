@@ -1,0 +1,36 @@
+.login__wrapper {
+  padding: 6rem 0;
+  width: min(100vw - 1rem, 24rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  gap: 3rem;
+}
+
+.login__form {
+  width: 100%;
+}
+
+.login__btn {
+  width: 100%;
+}
+
+.login__btns-wrapper {
+  width: 100%;
+}
+
+.login__google-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.login__google-btn > div {
+  display: flex;
+  margin: 0 !important;
+}
+
+.login__signup-btn {
+  width: 100%;
+  margin-top: 1rem;
+}
