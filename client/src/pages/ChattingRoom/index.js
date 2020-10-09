@@ -4,6 +4,8 @@ import { Button, Spin, Input, Form } from 'antd';
 import io from 'socket.io-client';
 import moment from 'moment';
 
+import './ChattingRoom.css';
+
 const socket = io({
   autoConnect: false,
 });

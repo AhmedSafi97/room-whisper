@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Switch, Route, useHistory, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { Spin } from 'antd';
-
-import Login from './Components/Login';
-import Signup from './Components/Signup';
-import Rooms from './Components/Rooms';
-import Landing from './Components/Landing';
-import ChattingRoom from './Components/ChattingRoom';
 
 import './App.css';
 import 'antd/dist/antd.css';
 
+import { Home, Signup, Login, Rooms, ChattingRoom } from './pages';
+
 const App = () => {
-  const history = useHistory();
   const [auth, setAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState('user');
@@ -63,7 +58,7 @@ const App = () => {
               <Login setAuth={setAuth} />
             </Route>
             <Route exact path="/">
-              <Landing />
+              <Home />
             </Route>
             <Route exact path="*">
               <Redirect to="/" />
