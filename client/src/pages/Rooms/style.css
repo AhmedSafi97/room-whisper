@@ -1,0 +1,17 @@
+.rooms__wrapper {
+  padding: 2rem 0;
+  width: min(100vw - 1rem, 24rem);
+  margin: auto;
+}
+
+.rooms__error {
+  text-align: center;
+  color: red;
+  font-size: 2rem;
+  margin-top: 4rem;
+}
+
+.rooms__spinner {
+  text-align: center;
+  margin-top: 5rem;
+}
