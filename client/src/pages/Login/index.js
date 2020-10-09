@@ -1,17 +1,15 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { GoogleLogin } from 'react-google-login';
 import { Form, Input, Button, message } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import './style.css';
-import { handleGoogleLogin, handleLogin } from '../../utils';
+
+import { handleLogin } from '../../utils';
+import { GoogleLoginBtn } from '../../components';
 
 const Login = ({ setAuth }) => {
   const history = useHistory();
-
-  const onGoogleLoginFailure = () =>
-    message.error('Something went wrong, please try again later');
 
   const onFinish = (credentials) =>
     handleLogin(credentials, () => setAuth(true), message.error);
@@ -39,7 +37,7 @@ const Login = ({ setAuth }) => {
           rules={[
             {
               required: true,
-              message: 'Please input your password!',
+              message: 'Please input your password',
             },
             {
               min: 8,
@@ -61,20 +59,7 @@ const Login = ({ setAuth }) => {
         </Form.Item>
       </Form>
       <div className="login__btns-wrapper">
-        <GoogleLogin
-          className="login__google-btn"
-          clientId={process.env.REACT_APP_CLIENT_ID}
-          buttonText="Login"
-          onSuccess={(response) =>
-            handleGoogleLogin(
-              response,
-              () => setAuth(true),
-              onGoogleLoginFailure
-            )
-          }
-          onFailure={onGoogleLoginFailure}
-          cookiePolicy="single_host_origin"
-        />
+        <GoogleLoginBtn setAuth={setAuth} />
         <Button
           size="large"
           className="login__signup-btn"

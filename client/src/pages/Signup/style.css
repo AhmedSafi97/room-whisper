@@ -1,4 +1,4 @@
-.login__wrapper {
+.signup__wrapper {
   padding: 6rem 0;
   width: min(100vw - 1rem, 24rem);
   display: flex;
@@ -8,19 +8,19 @@
   gap: 3rem;
 }
 
-.login__form {
+.signup__form {
   width: 100%;
 }
 
-.login__btn {
+.signup__btn {
   width: 100%;
 }
 
-.login__btns-wrapper {
+.signup__btns-wrapper {
   width: 100%;
 }
 
-.login__signup-btn {
+.signup__login-btn {
   width: 100%;
   margin-top: 1rem;
 }

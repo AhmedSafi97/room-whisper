@@ -1,57 +1,29 @@
 import React from 'react';
-import axios from 'axios';
 import propTypes from 'prop-types';
-import { GoogleLogin } from 'react-google-login';
 import { Form, Input, Button, message } from 'antd';
 import { useHistory } from 'react-router-dom';
+
+import './style.css';
+
+import { handleSignup } from '../../utils';
+import { GoogleLoginBtn } from '../../components';
 
 const Signup = ({ setAuth }) => {
   const history = useHistory();
 
-  const successResponse = async (response) => {
-    try {
-      const { tokenId } = response;
-      await axios.post('/api/v1/login/google', { tokenId });
-      message.success('sign up successfully');
-      setAuth(true);
-    } catch (err) {
-      message.error('Something went wrong, please try again later');
-    }
-  };
-
-  const failureResponse = () => {
-    message.error('Something went wrong, please try again later');
-  };
-
-  const onFinish = async ({ username, email, password }) => {
-    try {
-      await axios.post('/api/v1/signup', { username, email, password });
-      await axios.post('/api/v1/login', { email, password });
-      message.success('sign up successfully');
-      setAuth(true);
-    } catch (err) {
-      if (err.response) {
-        if (err.response.status === 500)
-          message.error('Something went wrong, please try again later');
-        else message.error(err.response.data.message);
-      } else message.error('Something went wrong, please try again later');
-    }
-  };
-
-  const login = () => history.push('/login');
+  const onFinish = (data) =>
+    handleSignup(data, () => setAuth(true), message.error);
 
   return (
-    <>
-      <p>Sign Up</p>
-      <Form name="signup" onFinish={onFinish}>
+    <div className="signup__wrapper">
+      <Form className="signup__form" name="signup" onFinish={onFinish}>
         <Form.Item
-          label="Username"
           name="username"
           validateTrigger="onSubmit"
           rules={[
             {
               required: true,
-              message: 'Please input your name!',
+              message: 'Please input your name',
             },
             {
               max: 12,
@@ -59,17 +31,16 @@ const Signup = ({ setAuth }) => {
             },
           ]}
         >
-          <Input placeholder="Type your name" />
+          <Input size="large" placeholder="Type your name" />
         </Form.Item>
         <Form.Item
-          label="Email"
           name="email"
           validateTrigger="onSubmit"
           rules={[
             {
               required: true,
               max: 50,
-              message: 'Please input your email!',
+              message: 'Please input your email',
             },
             {
               type: 'email',
@@ -77,17 +48,15 @@ const Signup = ({ setAuth }) => {
             },
           ]}
         >
-          <Input placeholder="Type your email" />
+          <Input size="large" placeholder="Type your email" />
         </Form.Item>
-
         <Form.Item
-          label="Password"
           name="password"
           validateTrigger="onSubmit"
           rules={[
             {
               required: true,
-              message: 'Please input your password!',
+              message: 'Please input your password',
             },
             {
               max: 20,
@@ -95,26 +64,30 @@ const Signup = ({ setAuth }) => {
             },
           ]}
         >
-          <Input.Password placeholder="Type your password" />
+          <Input.Password size="large" placeholder="Type your password" />
         </Form.Item>
-
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button
+            size="large"
+            className="signup__btn"
+            type="primary"
+            htmlType="submit"
+          >
             Sign Up
           </Button>
         </Form.Item>
       </Form>
-      <p>Or Sign Up Using</p>
-      <GoogleLogin
-        clientId="882324455984-i7obpjbjr79rug23t9aitmlc15cqvqtf.apps.googleusercontent.com"
-        buttonText="Sign Up"
-        onSuccess={successResponse}
-        onFailure={failureResponse}
-        cookiePolicy="single_host_origin"
-      />
-      <p>Have an account ?</p>
-      <Button onClick={login}>Login</Button>
-    </>
+      <div className="signup__btns-wrapper ">
+        <GoogleLoginBtn setAuth={setAuth} />
+        <Button
+          size="large"
+          className="signup__login-btn"
+          onClick={() => history.push('/login')}
+        >
+          Login
+        </Button>
+      </div>
+    </div>
   );
 };
 
