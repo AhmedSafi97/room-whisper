@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "google-auth-library": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.14",
+    "mongoose": "^5.10.8",
     "socket.io": "^2.3.0",
     "yup": "^0.28.5"
   },
