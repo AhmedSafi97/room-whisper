@@ -8,10 +8,10 @@ const getRooms = async (req, res, next) => {
         statusCode: 200,
         data: [],
       });
-    const roomsNames = rooms.map(({ room }) => room);
+
     return res.json({
       statusCode: 200,
-      data: roomsNames,
+      data: rooms,
     });
   } catch (err) {
     return next(err);

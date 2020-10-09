@@ -1,0 +1,11 @@
+.room-excerpt__wrapper {
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0px 0px 12px 0px rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  padding: 1rem;
+  cursor: pointer;
+}
