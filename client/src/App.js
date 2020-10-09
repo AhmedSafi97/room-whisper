@@ -36,36 +36,34 @@ const App = () => {
   }
   return (
     <div className="App">
-      <div className="App-header">
-        {auth ? (
-          <Switch>
-            <Route path="/rooms/:room">
-              <ChattingRoom />
-            </Route>
-            <Route path="/rooms">
-              <Rooms role={role} setRole={setRole} setAuth={setAuth} />
-            </Route>
-            <Route path="*">
-              <Redirect to="rooms" />
-            </Route>
-          </Switch>
-        ) : (
-          <Switch>
-            <Route path="/signup">
-              <Signup setAuth={setAuth} />
-            </Route>
-            <Route path="/login">
-              <Login setAuth={setAuth} />
-            </Route>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route exact path="*">
-              <Redirect to="/" />
-            </Route>
-          </Switch>
-        )}
-      </div>
+      {auth ? (
+        <Switch>
+          <Route path="/rooms/:room">
+            <ChattingRoom />
+          </Route>
+          <Route path="/rooms">
+            <Rooms role={role} setRole={setRole} setAuth={setAuth} />
+          </Route>
+          <Route path="*">
+            <Redirect to="rooms" />
+          </Route>
+        </Switch>
+      ) : (
+        <Switch>
+          <Route path="/signup">
+            <Signup setAuth={setAuth} />
+          </Route>
+          <Route path="/login">
+            <Login setAuth={setAuth} />
+          </Route>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route exact path="*">
+            <Redirect to="/" />
+          </Route>
+        </Switch>
+      )}
     </div>
   );
 };
