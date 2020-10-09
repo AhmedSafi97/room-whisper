@@ -1,8 +1,10 @@
 import React from 'react';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import { Button } from 'antd';
+import { useHistory } from 'react-router-dom';
 
-const Landing = ({ history }) => {
+const Landing = () => {
+  const history = useHistory();
+
   return (
     <>
       <h1>Welcome</h1>
@@ -10,10 +12,6 @@ const Landing = ({ history }) => {
       <Button onClick={() => history.push('/signup')}>Sign Up</Button>
     </>
   );
-};
-
-Landing.propTypes = {
-  history: ReactRouterPropTypes.history.isRequired,
 };
 
 export default Landing;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import { useHistory, useParams } from 'react-router-dom';
 import { Button, Spin, Input, Form } from 'antd';
 import io from 'socket.io-client';
 import moment from 'moment';
@@ -9,7 +8,9 @@ const socket = io({
   autoConnect: false,
 });
 
-const ChattingRoom = ({ history }) => {
+const ChattingRoom = () => {
+  const history = useHistory();
+
   const [users, setUsers] = useState();
   const [username, setUsername] = useState();
   const [messages, setMessages] = useState([]);
@@ -114,10 +115,6 @@ const ChattingRoom = ({ history }) => {
       )}
     </div>
   );
-};
-
-ChattingRoom.propTypes = {
-  history: ReactRouterPropTypes.history.isRequired,
 };
 
 export default ChattingRoom;
