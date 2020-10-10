@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button, Spin, Input, Form } from 'antd';
+import { Button, Spin, Input } from 'antd';
 import io from 'socket.io-client';
-import moment from 'moment';
 
-import './ChattingRoom.css';
+import './style.css';
+
+import { MessagesList } from '../../components';
 
 const socket = io({
   autoConnect: false,
@@ -16,9 +17,8 @@ const ChattingRoom = () => {
   const [users, setUsers] = useState();
   const [username, setUsername] = useState();
   const [messages, setMessages] = useState([]);
+  const [msg, setMsg] = useState('');
   const { room } = useParams();
-  const [form] = Form.useForm();
-  const containerNode = useRef(null);
 
   useEffect(() => {
     socket.open();
@@ -42,79 +42,41 @@ const ChattingRoom = () => {
     }
   }, [users, username, history]);
 
-  useEffect(() => {
-    if (containerNode.current) {
-      containerNode.current.scrollTop = containerNode.current.scrollHeight;
-    }
-  });
-
   const leaveRoom = () => {
     history.push('/rooms');
   };
 
-  const onReset = () => {
-    form.resetFields();
+  const onFinish = (e) => {
+    e.preventDefault();
+    if (msg) {
+      const date = Date.now();
+      socket.emit('msg', { msg, room, username, date });
+      setMsg('');
+    }
   };
 
-  const onFinish = ({ msg }) => {
-    socket.emit('msg', { msg, room, username });
-    onReset();
-  };
+  if (!users) return <Spin className="chatting__spinner" />;
 
   return (
-    <div>
-      <Button onClick={leaveRoom}>Leave room</Button>
-      {!users && <Spin />}
-      {users && (
-        <div>
-          <p>
-            {room}, {users.length} online users
-          </p>
-          <div>
-            online users :
-            <div>
-              {users.map((user) => (
-                <div key={user}>{user}</div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <div className="chat-container" ref={containerNode}>
-              {messages.length !== 0 &&
-                messages.map((m) => (
-                  <div key={m.date} className="chat">
-                    <span>
-                      <b>{m.author} :</b>
-                    </span>
-                    <p>{m.msg}</p>
-                    <span>
-                      {moment(m.date).format('dddd, MMMM Do YYYY, h:mm:ss a')}
-                    </span>
-                  </div>
-                ))}
-            </div>
-            <Form name="sendMsg" form={form} onFinish={onFinish}>
-              <Form.Item
-                name="msg"
-                rules={[
-                  {
-                    required: true,
-                    message: 'write something!',
-                  },
-                ]}
-              >
-                <Input autoComplete="off" />
-              </Form.Item>
-
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Send
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </div>
-      )}
+    <div className="chatting__wrapper">
+      <div className="chatting__header">
+        <p>
+          {room}, {users.length} online users
+        </p>
+        <Button onClick={leaveRoom}>Leave room</Button>
+      </div>
+      <MessagesList messages={messages} />
+      <form className="chatting__form" onSubmit={onFinish}>
+        <Input
+          size="large"
+          autoComplete="off"
+          value={msg}
+          onChange={(e) => setMsg(e.target.value)}
+        />
+        <Button size="large" type="primary" htmlType="submit">
+          Send
+        </Button>
+      </form>
     </div>
   );
 };

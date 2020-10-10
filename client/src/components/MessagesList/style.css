@@ -1,0 +1,8 @@
+.messages-list__wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+  height: calc(100vh - 80px);
+  width: 100%;
+}

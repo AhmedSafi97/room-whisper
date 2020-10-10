@@ -1,0 +1,31 @@
+.chatting__wrapper {
+  width: min(100vw - 1rem, 36rem);
+  height: 100vh;
+  margin: auto;
+  border: 1px solid white;
+}
+
+.chatting__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 1rem;
+  font-size: 1.25rem;
+  background-color: white;
+}
+
+.chatting__header > p {
+  margin: 0;
+}
+
+.chatting__form {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: min(100vw - 1rem, 36rem);
+}
+
+.chatting__spinner {
+  margin: auto;
+  width: 100%;
+  padding-top: 50vh;
+}

@@ -1,0 +1,25 @@
+.message__wrapper {
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  color: white;
+  background-color: #00000038;
+}
+
+.message__author {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.message__text {
+  margin: 0;
+}
+
+.message__date {
+  margin: 0;
+}
+
+.message__author-date__wrapper {
+  display: flex;
+  justify-content: space-between;
+}
