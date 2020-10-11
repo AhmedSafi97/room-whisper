@@ -4,12 +4,16 @@ const createError = require('../../utils/createError');
 const serverError = (err, req, res, next) => {
   // eslint-disable-next-line no-console
   console.log(err);
-  const errorResponse = createError(
-    500,
-    'Internal Server Error',
-    'Something went wrong, please try again later'
-  );
-  res.status(500).json(errorResponse);
+
+  const errorMessage = err.statusCode
+    ? err
+    : createError(
+        500,
+        'Internal Server Error',
+        'Something went wrong, please try again later'
+      );
+
+  res.status(err.statusCode || 500).json(errorMessage);
 };
 
 module.exports = serverError;
