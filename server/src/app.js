@@ -1,5 +1,4 @@
 require('dotenv').config();
-require('./database/dbConnection');
 
 const http = require('http');
 const { join } = require('path');
@@ -9,6 +8,7 @@ const socketIO = require('socket.io');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 
+const dbConnection = require('./database/dbConnection');
 const router = require('./router');
 const ioHandler = require('./io');
 
@@ -34,4 +34,4 @@ if (process.env.NODE_ENV === 'production') {
 
 io.on('connection', ioHandler(io));
 
-module.exports = server;
+module.exports = { server, app, dbConnection };
