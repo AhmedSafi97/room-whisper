@@ -3,6 +3,8 @@ const request = require('supertest');
 const { app, dbConnection } = require('../src/app');
 const { createUser } = require('../src/utils');
 
+let token;
+
 beforeAll(async () => {
   await dbConnection.dropDatabase();
   await createUser({
@@ -107,5 +109,80 @@ describe('signup process', () => {
       statusCode: 201,
       message: 'signed up successfully',
     });
+  });
+});
+
+describe('login process', () => {
+  it('login with missing email or password must fail', async () => {
+    const res = await request(app)
+      .post('/api/v1/login')
+      .send({})
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(400);
+
+    expect(res.body).toEqual({
+      statusCode: 400,
+      error: 'Bad Request',
+      message: ['email is a required field', 'password is a required field'],
+    });
+  });
+
+  it('login with non-existing email must fail', async () => {
+    const res = await request(app)
+      .post('/api/v1/login')
+      .send({
+        email: 'un-know@gmail.com',
+        password: '123456789',
+      })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(400);
+
+    expect(res.body).toEqual({
+      statusCode: 400,
+      error: 'Bad Request',
+      message: 'an account with this email does not exist',
+    });
+  });
+
+  it('login with incorrect password must fail', async () => {
+    const res = await request(app)
+      .post('/api/v1/login')
+      .send({
+        email: 'tester@gmail.com',
+        password: '123456789',
+      })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(401);
+
+    expect(res.body).toEqual({
+      statusCode: 401,
+      error: 'Unauthorized',
+      message: 'password is incorrect',
+    });
+  });
+
+  it('login with correct credentials must proceed', async () => {
+    const res = await request(app)
+      .post('/api/v1/login')
+      .send({
+        email: 'tester@gmail.com',
+        password: '123456789tester',
+      })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    if (res.header['set-cookie'])
+      [token] = res.header['set-cookie'][0].split('=')[1].split(';');
+
+    expect(res.body).toEqual({
+      message: 'logged in successfully',
+      statusCode: 200,
+    });
+
+    expect(token).toBeDefined();
   });
 });
