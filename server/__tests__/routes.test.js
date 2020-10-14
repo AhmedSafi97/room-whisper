@@ -2,8 +2,10 @@
 const request = require('supertest');
 const { app, dbConnection } = require('../src/app');
 const { createUser } = require('../src/utils');
+const createAdmin = require('../src/utils/createAdminAccount');
 
 let token;
+let adminToken;
 
 beforeAll(async () => {
   await dbConnection.dropDatabase();
@@ -12,9 +14,18 @@ beforeAll(async () => {
     email: 'user@gmail.com',
     password: 'user123456789',
   });
+  await createAdmin({
+    username: 'admin',
+    email: 'admin@gmail.com',
+    password: 'admin123456789',
+    role: 'admin',
+  });
 });
 
-afterAll(() => dbConnection.close());
+afterAll(async () => {
+  await dbConnection.dropDatabase();
+  await dbConnection.close();
+});
 
 describe('signup process', () => {
   it('signup with missing username, email or password must fail', async () => {
@@ -184,5 +195,85 @@ describe('login process', () => {
     });
 
     expect(token).toBeDefined();
+  });
+
+  it('login as an admin must proceed', async () => {
+    const res = await request(app)
+      .post('/api/v1/login')
+      .send({
+        email: 'admin@gmail.com',
+        password: 'admin123456789',
+      })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    if (res.header['set-cookie'])
+      [adminToken] = res.header['set-cookie'][0].split('=')[1].split(';');
+
+    expect(res.body).toEqual({
+      message: 'logged in successfully',
+      statusCode: 200,
+    });
+
+    expect(token).toBeDefined();
+  });
+});
+
+describe('creating a new room', () => {
+  it('create a room with a non-admin account must fail', async () => {
+    const res = await request(app)
+      .post('/api/v1/rooms')
+      .send({
+        room: 'test room',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', [`token=${token}; Path=/`])
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(403);
+
+    expect(res.body).toEqual({
+      statusCode: 403,
+      error: 'Forbidden',
+      message: 'only admin is allowed to create new rooms',
+    });
+  });
+
+  it('create a room with invalid name must fail must fail', async () => {
+    const res = await request(app)
+      .post('/api/v1/rooms')
+      .send({
+        room: '',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', [`token=${adminToken}; Path=/`])
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(400);
+
+    expect(res.body).toEqual({
+      error: 'Bad Request',
+      message: ['room is a required field'],
+      statusCode: 400,
+    });
+  });
+
+  it('create a room with admin account must proceed', async () => {
+    const res = await request(app)
+      .post('/api/v1/rooms')
+      .send({
+        room: 'test room',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', [`token=${adminToken}; Path=/`])
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(201);
+
+    expect(res.body).toEqual({
+      message: 'room has been created successfully',
+      statusCode: 201,
+    });
   });
 });

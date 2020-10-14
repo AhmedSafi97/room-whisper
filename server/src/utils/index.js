@@ -12,6 +12,9 @@ const createUser = require('./createUser');
 const getUserByEmail = require('./getUserByEmail');
 const checkPassword = require('./checkPassword');
 const createToken = require('./createToken');
+const validateRoomName = require('./roomValidation');
+const isNewRoom = require('./isNewRoom');
+const createRoom = require('./createRoom');
 
 module.exports = {
   createError,
@@ -28,4 +31,7 @@ module.exports = {
   getUserByEmail,
   checkPassword,
   createToken,
+  validateRoomName,
+  isNewRoom,
+  createRoom,
 };

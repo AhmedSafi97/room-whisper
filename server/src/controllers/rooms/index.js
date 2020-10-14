@@ -1,7 +1,7 @@
 const getRooms = require('./getRooms');
-const createRoom = require('./createRoom');
+const addRoom = require('./createRoom');
 
 module.exports = {
   getRooms,
-  createRoom,
+  addRoom,
 };

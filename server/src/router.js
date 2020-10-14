@@ -9,7 +9,7 @@ const {
   checkToken,
   logout,
   getRooms,
-  createRoom,
+  addRoom,
 } = require('./controllers');
 
 const { withAuth } = require('./middleware');
@@ -19,7 +19,7 @@ const router = express.Router();
 router.get('/checkToken', checkToken);
 router.get('/logout', logout);
 router.get('/rooms', withAuth, getRooms);
-router.post('/rooms', withAuth, createRoom);
+router.post('/rooms', withAuth, addRoom);
 router.post('/signup', signup);
 router.post('/login', login);
 router.post('/login/google', googleLogin);
