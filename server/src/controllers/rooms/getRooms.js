@@ -2,12 +2,11 @@ const { Rooms } = require('../../database/models');
 
 const getRooms = async (req, res, next) => {
   try {
-    const rooms = await Rooms.find();
-    if (rooms.length === 0)
-      return res.json({
-        statusCode: 200,
-        data: [],
-      });
+    const rooms = await Rooms.aggregate([
+      {
+        $project: { room: true, users: { $size: '$users' } },
+      },
+    ]);
 
     return res.json({
       statusCode: 200,
