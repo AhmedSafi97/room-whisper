@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 import './style.css';
 
-const RoomExcerpt = ({ name }) => {
+const RoomExcerpt = ({ name, users }) => {
   const history = useHistory();
 
   return (
@@ -16,12 +16,14 @@ const RoomExcerpt = ({ name }) => {
       onClick={() => history.push(`/rooms/${name}`)}
     >
       <h2>{name}</h2>
+      <p>{users} online</p>
     </div>
   );
 };
 
 RoomExcerpt.propTypes = {
   name: propTypes.string.isRequired,
+  users: propTypes.number.isRequired,
 };
 
 export default RoomExcerpt;

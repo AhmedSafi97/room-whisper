@@ -277,3 +277,18 @@ describe('creating a new room', () => {
     });
   });
 });
+
+describe('retrieve rooms', () => {
+  it('get all rooms', async () => {
+    const res = await request(app)
+      .get('/api/v1/rooms')
+      .set('Accept', 'application/json')
+      .set('Cookie', [`token=${token}; Path=/`])
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    expect(res.body.data[0].room).toBe('test room');
+    expect(res.body.data[0].users).toBe(0);
+  });
+});

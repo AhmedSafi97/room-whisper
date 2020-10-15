@@ -8,8 +8,8 @@ import RoomExcerpt from '../RoomExcerpt';
 const RoomsList = ({ rooms }) => {
   return (
     <div className="rooms-list__wrapper">
-      {rooms.map(({ _id, room }) => (
-        <RoomExcerpt key={_id} name={room} />
+      {rooms.map(({ _id, room, users }) => (
+        <RoomExcerpt key={_id} name={room} users={users} />
       ))}
     </div>
   );
