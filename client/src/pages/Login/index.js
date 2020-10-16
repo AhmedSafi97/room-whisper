@@ -1,15 +1,16 @@
-import React from 'react';
-import propTypes from 'prop-types';
+import React, { useContext } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import './style.css';
 
+import UserContext from '../../context';
 import { handleLogin } from '../../utils';
 import { GoogleLoginBtn } from '../../components';
 
-const Login = ({ setAuth }) => {
+const Login = () => {
   const history = useHistory();
+  const { setAuth } = useContext(UserContext);
 
   const onFinish = (credentials) =>
     handleLogin(credentials, () => setAuth(true), message.error);
@@ -70,10 +71,6 @@ const Login = ({ setAuth }) => {
       </div>
     </div>
   );
-};
-
-Login.propTypes = {
-  setAuth: propTypes.func.isRequired,
 };
 
 export default Login;
