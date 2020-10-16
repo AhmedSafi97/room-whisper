@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Spin } from 'antd';
 
@@ -7,7 +6,7 @@ import './style.css';
 
 import { RoomsList, Logout } from '../../components';
 
-const Rooms = ({ setRole, setAuth }) => {
+const Rooms = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [rooms, setRooms] = useState([]);
@@ -31,7 +30,7 @@ const Rooms = ({ setRole, setAuth }) => {
 
   return (
     <div className="rooms__wrapper">
-      <Logout setAuth={setAuth} setRole={setRole} />
+      <Logout />
       {error ? (
         <p className="rooms__error">{error}</p>
       ) : (
@@ -46,11 +45,6 @@ const Rooms = ({ setRole, setAuth }) => {
       )}
     </div>
   );
-};
-
-Rooms.propTypes = {
-  setRole: PropTypes.func.isRequired,
-  setAuth: PropTypes.func.isRequired,
 };
 
 export default Rooms;

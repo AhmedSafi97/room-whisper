@@ -1,70 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import { Switch } from 'react-router-dom';
 import { Spin } from 'antd';
 
 import './App.css';
 import 'antd/dist/antd.css';
 
+import UserContext from './context';
+import { useAuth } from './utils';
 import { Home, Signup, Login, Rooms, ChattingRoom } from './pages';
+import { PublicRoute, PrivateRoute } from './components';
 
 const App = () => {
-  const [auth, setAuth] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState('user');
-
-  const checkAuth = async () => {
-    try {
-      const { data } = await axios.get('/api/v1/checkToken');
-      if (data === 'un-auth') setLoading(false);
-      else {
-        if (data.role === 'admin') setRole('admin');
-        setAuth(true);
-        setLoading(false);
-      }
-    } catch (err) {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    checkAuth();
-  }, [auth]);
+  const { loading, auth, setAuth, username, removeCurrentUser } = useAuth();
 
   if (loading) {
     return <Spin />;
   }
   return (
-    <div className="App">
-      {auth ? (
+    <UserContext.Provider
+      value={{ auth, setAuth, username, removeCurrentUser }}
+    >
+      <div className="App">
         <Switch>
-          <Route path="/rooms/:room">
-            <ChattingRoom />
-          </Route>
-          <Route path="/rooms">
-            <Rooms role={role} setRole={setRole} setAuth={setAuth} />
-          </Route>
-          <Route path="*">
-            <Redirect to="rooms" />
-          </Route>
-        </Switch>
-      ) : (
-        <Switch>
-          <Route path="/signup">
-            <Signup setAuth={setAuth} />
-          </Route>
-          <Route path="/login">
-            <Login setAuth={setAuth} />
-          </Route>
-          <Route exact path="/">
+          <PublicRoute exact path="/">
             <Home />
-          </Route>
-          <Route exact path="*">
-            <Redirect to="/" />
-          </Route>
+          </PublicRoute>
+          <PublicRoute path="/signup">
+            <Signup />
+          </PublicRoute>
+          <PublicRoute path="/login">
+            <Login />
+          </PublicRoute>
+          <PrivateRoute path="/rooms/:room">
+            <ChattingRoom />
+          </PrivateRoute>
+          <PrivateRoute path="/rooms">
+            <Rooms />
+          </PrivateRoute>
         </Switch>
-      )}
-    </div>
+      </div>
+    </UserContext.Provider>
   );
 };
 
