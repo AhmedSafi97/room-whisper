@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, Spin, Input } from 'antd';
 import io from 'socket.io-client';
 
 import './style.css';
 
+import UserContext from '../../context';
 import { MessagesList } from '../../components';
 
 const socket = io({
@@ -14,8 +15,9 @@ const socket = io({
 const ChattingRoom = () => {
   const history = useHistory();
 
+  const { username } = useContext(UserContext);
+
   const [users, setUsers] = useState();
-  const [username, setUsername] = useState();
   const [messages, setMessages] = useState([]);
   const [msg, setMsg] = useState('');
   const { room } = useParams();
@@ -26,7 +28,6 @@ const ChattingRoom = () => {
     socket.on('joinRoom', (onlineUsers) => {
       setUsers(onlineUsers);
     });
-    socket.on('username', setUsername);
     socket.on('msg', (newMessage) => {
       setMessages((msgs) => [...msgs, ...newMessage]);
     });
@@ -38,6 +39,7 @@ const ChattingRoom = () => {
 
   useEffect(() => {
     if (users && username) {
+      console.log(users, username);
       if (!users.includes(username)) history.push('/rooms');
     }
   }, [users, username, history]);
