@@ -1,12 +1,11 @@
-const { parse } = require('cookie');
 const { Rooms, Chats } = require('../database/models');
-const { verifyToken, findRoomUsers } = require('../utils');
+const { findRoomUsers } = require('../utils');
 
 const joinRoom = (io, socket) => async ({ room }) => {
   try {
+    const { _id } = socket.decoded;
+
     socket.join(room);
-    const { token } = parse(socket.request.headers.cookie);
-    const { _id } = await verifyToken(token);
 
     await Rooms.updateOne({ room }, { $addToSet: { users: [_id] } });
 

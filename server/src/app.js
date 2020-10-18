@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const dbConnection = require('./database/dbConnection');
 const router = require('./router');
 const ioHandler = require('./io');
+const { verifyToken } = require('./utils');
 
 const app = express();
 const server = http.createServer(app);
@@ -32,6 +33,17 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
-io.on('connection', ioHandler(io));
+io.use(async (socket, next) => {
+  const token = socket.request.headers.cookie.match(/(?<=token=)(.*?)(?=;)/)[0];
+
+  try {
+    const decoded = await verifyToken(token);
+    // eslint-disable-next-line no-param-reassign
+    socket.decoded = decoded;
+    next();
+  } catch (err) {
+    next(new Error('Authentication error'));
+  }
+}).on('connection', ioHandler(io));
 
 module.exports = { server, app, dbConnection };
