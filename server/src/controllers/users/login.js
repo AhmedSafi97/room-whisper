@@ -17,7 +17,7 @@ const login = async (req, res, next) => {
     const token = await createToken(user._id, user.role);
 
     res
-      .cookie('token', token)
+      .cookie('mernChatToken', token)
       .json({ statusCode: 200, message: 'logged in successfully' });
   } catch (err) {
     next(err);

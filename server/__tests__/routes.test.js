@@ -4,7 +4,7 @@ const { app, dbConnection } = require('../src/app');
 const { createUser } = require('../src/utils');
 const createAdmin = require('../src/utils/createAdminAccount');
 
-let token;
+let mernChatToken;
 let adminToken;
 
 beforeAll(async () => {
@@ -187,14 +187,14 @@ describe('login process', () => {
       .expect(200);
 
     if (res.header['set-cookie'])
-      [token] = res.header['set-cookie'][0].split('=')[1].split(';');
+      [mernChatToken] = res.header['set-cookie'][0].split('=')[1].split(';');
 
     expect(res.body).toEqual({
       message: 'logged in successfully',
       statusCode: 200,
     });
 
-    expect(token).toBeDefined();
+    expect(mernChatToken).toBeDefined();
   });
 
   it('login as an admin must proceed', async () => {
@@ -216,7 +216,7 @@ describe('login process', () => {
       statusCode: 200,
     });
 
-    expect(token).toBeDefined();
+    expect(mernChatToken).toBeDefined();
   });
 });
 
@@ -228,7 +228,7 @@ describe('creating a new room', () => {
         room: 'test room',
       })
       .set('Accept', 'application/json')
-      .set('Cookie', [`token=${token}; Path=/`])
+      .set('Cookie', [`mernChatToken=${mernChatToken}; Path=/`])
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(403);
@@ -247,7 +247,7 @@ describe('creating a new room', () => {
         room: '',
       })
       .set('Accept', 'application/json')
-      .set('Cookie', [`token=${adminToken}; Path=/`])
+      .set('Cookie', [`mernChatToken=${adminToken}; Path=/`])
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(400);
@@ -266,7 +266,7 @@ describe('creating a new room', () => {
         room: 'test room',
       })
       .set('Accept', 'application/json')
-      .set('Cookie', [`token=${adminToken}; Path=/`])
+      .set('Cookie', [`mernChatToken=${adminToken}; Path=/`])
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(201);
@@ -283,7 +283,7 @@ describe('retrieve rooms', () => {
     const res = await request(app)
       .get('/api/v1/rooms')
       .set('Accept', 'application/json')
-      .set('Cookie', [`token=${token}; Path=/`])
+      .set('Cookie', [`mernChatToken=${mernChatToken}; Path=/`])
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200);

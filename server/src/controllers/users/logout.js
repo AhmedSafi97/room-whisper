@@ -1,6 +1,6 @@
 const logout = (req, res, next) => {
   try {
-    res.clearCookie('token').sendStatus(200);
+    res.clearCookie('mernChatToken').sendStatus(200);
   } catch (err) {
     next(err);
   }

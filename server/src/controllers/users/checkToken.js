@@ -3,8 +3,8 @@ const { Users } = require('../../database/models');
 
 const checkToken = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
-    const { _id } = await verifyToken(token);
+    const { mernChatToken } = req.cookies;
+    const { _id } = await verifyToken(mernChatToken);
     const { username, role } = await Users.findOne({ _id });
     return res.json({ username, role });
   } catch (err) {

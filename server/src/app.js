@@ -34,7 +34,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 io.use(async (socket, next) => {
-  const token = socket.request.headers.cookie.match(/(?<=token=)(.*?)(?=;)/)[0];
+  const token = socket.request.headers.cookie.match(
+    /(?<=mernChatToken=)(.*?)(?=;)/
+  )[0];
 
   try {
     const decoded = await verifyToken(token);
