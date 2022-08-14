@@ -14,7 +14,7 @@ const GoogleLoginBtn = ({ setAuth }) => {
   return (
     <GoogleLogin
       className="google-btn"
-      clientId={process.env.REACT_APP_CLIENT_ID}
+      clientId={process.env.CLIENT_ID}
       buttonText="Login"
       onSuccess={(response) =>
         handleGoogleLogin(response, () => setAuth(true), onGoogleLoginFailure)

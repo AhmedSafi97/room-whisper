@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../utils/axios';
 
 const useAuth = () => {
   const [auth, setAuth] = useState(false);
@@ -10,7 +10,7 @@ const useAuth = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await axios.get('/api/v1/checkToken');
+        const { data } = await axios.get('/checkToken');
         if (data === 'un-auth') {
           setLoading(false);
         } else {

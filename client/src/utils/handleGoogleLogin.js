@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from '../utils/axios';
 
 const handleGoogleLogin = async (response, successCallback, errCallback) => {
   try {
     const { tokenId } = response;
-    await axios.post('/api/v1/login/google', { tokenId });
+    await axios.post('/login/google', { tokenId });
     successCallback();
   } catch (err) {
     errCallback();

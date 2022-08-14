@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Spin } from 'antd';
 
-import './style.css';
-
+import axios from '../../utils/axios';
 import { RoomsList, Logout } from '../../components';
+import './style.css';
 
 const Rooms = () => {
   const [loading, setLoading] = useState(true);
@@ -15,7 +14,7 @@ const Rooms = () => {
     try {
       const {
         data: { data },
-      } = await axios.get('/api/v1/rooms');
+      } = await axios.get('/rooms');
       setLoading(false);
       setRooms(data);
     } catch (err) {

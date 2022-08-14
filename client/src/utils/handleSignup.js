@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from '../utils/axios';
 
 const handleSignup = async (data, successCallback, errCallback) => {
   try {
-    await axios.post('/api/v1/signup', data);
-    await axios.post('/api/v1/login', data);
+    await axios.post('/signup', data);
+    await axios.post('/login', data);
     successCallback();
   } catch (err) {
     let errMessage;

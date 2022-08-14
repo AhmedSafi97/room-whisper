@@ -8,7 +8,7 @@ import './style.css';
 import UserContext from '../../context';
 import { MessagesList } from '../../components';
 
-const socket = io({
+const socket = io('ws://127.0.0.1:4000/', {
   autoConnect: false,
 });
 
