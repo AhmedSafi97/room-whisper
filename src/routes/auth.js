@@ -1,19 +1,18 @@
-const express = require('express');
-const {
-  signup,
-  login,
-  googleLogin,
-  checkToken,
-  logout,
-} = require('../controllers');
-const expressCallback = require('../expressCallback');
+const express = require("express");
+const expressCallback = require("../expressCallback");
+const { AuthController, UserController } = require("../controllers");
 
 const router = express.Router();
 
-router.get('/checkToken', expressCallback(checkToken));
-router.get('/logout', expressCallback(logout));
-router.post('/signup', expressCallback(signup));
-router.post('/login', expressCallback(login));
-router.post('/login/google', expressCallback(googleLogin));
+router.post("/signup", expressCallback(UserController.createUser));
+router.post(
+  "/authenticate/token",
+  expressCallback(AuthController.authenticateWithToken)
+);
+router.post(
+  "/authenticate/google",
+  expressCallback(AuthController.authenticateWithGoogle)
+);
+router.post("/authenticate", expressCallback(AuthController.authenticate));
 
 module.exports = router;
