@@ -37,7 +37,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "google-auth-library": "^6.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.29.3",
     "mongoose": "^6.4.0",
     "prop-types": "^15.7.2",
